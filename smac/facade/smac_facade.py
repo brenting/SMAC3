@@ -75,7 +75,8 @@ class SMAC(object):
                  rng: typing.Optional[typing.Union[np.random.RandomState, int]]=None,
                  smbo_class: typing.Optional[SMBO]=None,
                  run_id: typing.Optional[int]=None,
-                 random_configuration_chooser: typing.Optional[RandomConfigurationChooser]=None):
+                 random_configuration_chooser: typing.Optional[RandomConfigurationChooser]=None,
+                 log_ei:typing.Optional[typing.Union[None, bool]]=None):
         """
         Constructor
 
@@ -204,11 +205,18 @@ class SMAC(object):
                                               min_samples_leaf=scenario.rf_min_samples_leaf,
                                               max_depth=scenario.rf_max_depth)
         # initial acquisition function
-        if acquisition_function is None:
+        if acquisition_function is None and log_ei is None:
             if scenario.logy:
                 acquisition_function = LogEI(model=model)
             else:
                 acquisition_function = EI(model=model)
+        elif isinstance(log_ei, bool):
+            if log_ei:
+                acquisition_function = LogEI(model=model)
+            else:
+                acquisition_function = EI(model=model)
+        else:
+            raise NotImplementedError
 
         # inject model if necessary
         if acquisition_function.model is None:
