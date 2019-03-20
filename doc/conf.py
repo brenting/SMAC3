@@ -20,7 +20,7 @@ import sphinx_rtd_theme
 
 sys.path.insert(0, '..')
 import smac
-from smac.scenario.scenario import Scenario
+from smac.utils.io.cmd_reader import CMDReader
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -62,8 +62,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SMAC'
-copyright = '2015-%s, %s' % (datetime.datetime.now().year, smac.AUTHORS)
-author = smac.AUTHORS
+copyright = '2015-%s, %s' % (datetime.datetime.now().year, smac.__author__)
+author = smac.__author__
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -243,7 +243,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'SMAC3.tex', u'SMAC3 Documentation', smac.AUTHORS, 'manual'),
+  (master_doc, 'SMAC3.tex', u'SMAC3 Documentation', smac.__author__, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -306,6 +306,7 @@ texinfo_documents = [
 # Show init as well as moduledoc
 autoclass_content = 'both'
 
-# Create Scenario-object to update the list of options in the docs
-scenario = Scenario({'run_obj':'runtime', 'cutoff_time':1, 'output_dir':''})
-scenario.write_options_to_doc()
+cmd_reader = CMDReader()
+cmd_reader.write_main_options_to_doc()
+cmd_reader.write_smac_options_to_doc()
+cmd_reader.write_scenario_options_to_doc()
